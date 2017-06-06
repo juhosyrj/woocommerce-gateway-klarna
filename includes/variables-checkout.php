@@ -345,6 +345,29 @@ if ( ! is_admin() && ! empty( $klarna_country ) ) {
 	WC()->session->set( 'klarna_country', apply_filters( 'klarna_country', $klarna_country ) );
 }
 
+// WPML, add language code to checkout url
+if (defined( 'ICL_LANGUAGE_CODE' ))
+{
+	$lang = ICL_LANGUAGE_CODE;
+ 
+	$checkout_settings = get_option( 'woocommerce_klarna_checkout_settings' );
+	$lang_parameter = isset( $checkout_settings['wpml_use_lang_parameter'] ) ? $checkout_settings['wpml_use_lang_parameter'] : 'no';
+ 
+	if ( 'yes' === $lang_parameter ) {
+		$klarna_checkout_url = $klarna_checkout_url . '?lang=' . $lang . '&';
+	}
+	else
+	{
+		$url = $klarna_checkout_url;
+		$url_start = substr($url, 0, 10);
+		$url_end = substr($url, 10, strlen($url));
+		
+		$url1 = substr($url_end, 0, strpos($url_end, "/"));
+		$url2 = substr($url_end, strpos($url_end, "/")+1, strlen($url_end));
+
+		$klarna_checkout_url = $url_start . $url1 . '/' . $lang . '/' . $url2;
+	}
+}
 
 // Apply filters to Country and language
 $this->klarna_country             = apply_filters( 'klarna_country', $klarna_country );

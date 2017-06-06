@@ -10,7 +10,25 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 By Krokedil - http://krokedil.com/
 
+Modified by juho.syrjanen@klarna.com
 
+
+== WPML SUPPORT ==
+
+Settings:
+Klarna Checkout settings has two new settings:
+Language name added as a parameter (lang=xx)
+Skip default language (WPML)
+
+Make sure these are alinged with your WPML settings.
+
+Testing:
+Tested with Finnish, Swedish and English, using both Language name added as a parameter and Different languages in directories.
+
+Not tested with option 'Check items stock and valid shipping method during checkout' enabled.
+
+Known issues:
+Cart widget at checkout page changes language in the middle of purchase
 
 == DESCRIPTION ==
 

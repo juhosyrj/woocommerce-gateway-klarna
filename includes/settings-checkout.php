@@ -505,7 +505,24 @@ return apply_filters( 'klarna_checkout_form_fields', array(
 		'label'       => __( 'Several other plugins rely on is_order_received_page() function returning true in WooCommerce thank you page. Checking this option will make sure is_order_received_page() returns true in Klarna\'s custom thank you page as well.', 'woocommerce-gateway-klarna' ),
 		'default'     => 'no'
 	),
-
+	
+	'wpml_settings_title'     => array(
+		'title' => __( 'WPML Settings', 'woocommerce-gateway-klarna' ),
+		'type'  => 'title',
+	),
+	'wpml_use_lang_parameter' => array(
+		'title'       => __( 'Language name added as a parameter (lang=xx)', 'woocommerce-gateway-klarna' ),
+		'type'        => 'checkbox',
+		'label'       => __( 'Leave empty for separate directory formation (/xx/), check for lang parameter (?lang=xx)', 'woocommerce-gateway-klarna' ),
+		'default'     => 'no'
+	),
+	'wpml_default_lang'        => array(
+		'title'       => __( 'Skip default language (WPML)', 'woocommerce-gateway-klarna' ),
+		'type'        => 'text',
+		'description' => __( 'Add default language code to above if you are not using /xx/ directory for default language. Leave blank to disable.', 'woocommerce-gateway-klarna' ),
+		'default'     => '',
+	),
+	
 	'color_settings_title'     => array(
 		'title' => __( 'Color Settings', 'woocommerce-gateway-klarna' ),
 		'type'  => 'title',

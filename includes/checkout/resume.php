@@ -155,13 +155,68 @@ try {
 				'klarna_order' => '{checkout.order.id}',
 				'klarna-api'   => 'v2',
 			), $push_uri_base );
-			$merchant_confirmation_uri = add_query_arg( array(
-				'klarna_order'   => '{checkout.order.id}',
-				'sid'            => $local_order_id,
-				'order-received' => $local_order_id,
-				'thankyou'       => 'yes',
-				'key'            => $order_key,
-			), $this->klarna_checkout_thanks_url );
+			// add WPML lang parameter to confirmation page if defined
+			if (defined( 'ICL_LANGUAGE_CODE' ))
+			{
+				$lang = ICL_LANGUAGE_CODE;
+				$checkout_settings = get_option( 'woocommerce_klarna_checkout_settings' );
+				$lang_parameter = isset( $checkout_settings['wpml_use_lang_parameter'] ) ? $checkout_settings['wpml_use_lang_parameter'] : 'no';
+			 
+				if ( 'yes' === $lang_parameter ) {
+					$merchant_confirmation_uri = add_query_arg( array(
+						'lang'			 => $lang,
+						'klarna_order'   => '{checkout.order.id}',
+						'sid'            => $local_order_id,
+						'order-received' => $local_order_id,
+						'thankyou'       => 'yes',
+						'key'            => $order_key
+					), $this->klarna_checkout_thanks_url );
+				}
+				else
+				{
+					$wpml_skip_lang = isset( $checkout_settings['wpml_default_lang'] ) ? $checkout_settings['wpml_default_lang'] : '';
+					
+					if ($wpml_skip_lang !== $lang)
+					{
+						$url = $this->klarna_checkout_thanks_url;
+						$url_start = substr($url, 0, 10);
+						$url_end = substr($url, 10, strlen($url));
+						
+						$url1 = substr($url_end, 0, strpos($url_end, "/"));
+						$url2 = substr($url_end, strpos($url_end, "/")+1, strlen($url_end));
+
+						$kco_thanks_url = $url_start . $url1 . '/' . $lang . '/' . $url2;
+						
+						$merchant_confirmation_uri = add_query_arg( array(
+							'klarna_order'   => '{checkout.order.id}',
+							'sid'            => $local_order_id,
+							'order-received' => $local_order_id,
+							'thankyou'       => 'yes',
+							'key'            => $order_key
+						), $kco_thanks_url );
+					}
+					else
+					{
+						$merchant_confirmation_uri = add_query_arg( array(
+							'klarna_order'   => '{checkout.order.id}',
+							'sid'            => $local_order_id,
+							'order-received' => $local_order_id,
+							'thankyou'       => 'yes',
+							'key'            => $order_key
+						), $this->klarna_checkout_thanks_url );
+					}
+				}
+			}
+			else
+			{
+				$merchant_confirmation_uri = add_query_arg( array(
+					'klarna_order'   => '{checkout.order.id}',
+					'sid'            => $local_order_id,
+					'order-received' => $local_order_id,
+					'thankyou'       => 'yes',
+					'key'            => $order_key
+				), $this->klarna_checkout_thanks_url );
+			}
 		}
 
 		// Different format for V3 and V2.
