@@ -358,14 +358,19 @@ if (defined( 'ICL_LANGUAGE_CODE' ))
 	}
 	else
 	{
-		$url = $klarna_checkout_url;
-		$url_start = substr($url, 0, 10);
-		$url_end = substr($url, 10, strlen($url));
-		
-		$url1 = substr($url_end, 0, strpos($url_end, "/"));
-		$url2 = substr($url_end, strpos($url_end, "/")+1, strlen($url_end));
+		$wpml_skip_lang = isset( $checkout_settings['wpml_default_lang'] ) ? $checkout_settings['wpml_default_lang'] : '';
+			
+		if ($wpml_skip_lang !== $lang)
+		{
+			$url = $klarna_checkout_url;
+			$url_start = substr($url, 0, 10);
+			$url_end = substr($url, 10, strlen($url));
+			
+			$url1 = substr($url_end, 0, strpos($url_end, "/"));
+			$url2 = substr($url_end, strpos($url_end, "/")+1, strlen($url_end));
 
-		$klarna_checkout_url = $url_start . $url1 . '/' . $lang . '/' . $url2;
+			$klarna_checkout_url = $url_start . $url1 . '/' . $lang . '/' . $url2;
+		}
 	}
 }
 
